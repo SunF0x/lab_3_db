@@ -19,10 +19,11 @@ conn = psycopg2.connect(
     port="5432")
 cursor = conn.cursor()
 list_flights = []
-i=1
+i = 1
 deleted = 0 
+modified = 0
 
-f = open("metadata.txt", "w")
+f = open("metadata.txt", "a")
 f.write("Import data from MongoDB to PostgreSQL into the flights table\n")
 f.write(f"Current time: {datetime.now()}\n")
 
@@ -36,6 +37,7 @@ for row in db["flights"].find():
         # full = str(row["series"])+" "+str(row["number"])
         full = row["series"]*1000000+row["number"]
         one_dict.update({'passport' : full})
+        modified+=1
     
     if (row['from']==row['to']):
         print("Same town: ",i)
@@ -54,9 +56,13 @@ for row in db["flights"].find():
         one_dict.update({'date_to' : row['date_from']})
         one_dict.update({'date_from' : row['date_to']})
         print("Time incorrect: ",i, date_from, date_to)
+        modified+=1
 
     if "price" in row:
         one_dict.update({'price' : int(row['price'])})
+        if (type(row["price"]) is str):
+            modified+=1
+            print("String", i)
     
     if (row['from']!=row['to']):
         # list_flights.append(one_dict)
@@ -64,9 +70,11 @@ for row in db["flights"].find():
     i+=1
 
 #print(list_flights)
-f.write(f"Number of entries in Mongo: {i}\n")
+f.write(f"Number of entries in Mongo: {i-1}\n")
 f.write(f"Number of entries deleted: {deleted}\n")
-f.write(f"Number of entries inserted into Postgres: {i-deleted}\n")
+f.write(f"Number of entries inserted into Postgres: {i-1-deleted}\n")
+f.write(f"Number of data changed: {modified}\n")
+f.write("\n")
 
 # print(cursor.execute("select * from flights;"))
 # for i,val in enumerate(list_flights):
