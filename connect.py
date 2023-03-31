@@ -40,11 +40,10 @@ for row in db["flights"].find():
         modified+=1
     
     if (row['from']==row['to']):
-        print("Same town: ",i)
+        #print("Same town: ",i)
         deleted+=1
-    else:
-        one_dict.update({'from' : row['from']})
-        one_dict.update({'to' : row['to']})
+    one_dict.update({'from' : row['from']})
+    one_dict.update({'to' : row['to']})
     
     format='%Y-%m-%d %H:%M:%S.%f'
     date_from = datetime.strptime(row['date_from'],format)
@@ -55,23 +54,23 @@ for row in db["flights"].find():
     else:
         one_dict.update({'date_to' : row['date_from']})
         one_dict.update({'date_from' : row['date_to']})
-        print("Time incorrect: ",i, date_from, date_to)
+        #print("Time incorrect: ",i, date_from, date_to)
         modified+=1
 
     if "price" in row:
         one_dict.update({'price' : int(row['price'])})
         if (type(row["price"]) is str):
             modified+=1
-            print("String", i)
+            #print("String", i)
     
-    if (row['from']!=row['to']):
-        # list_flights.append(one_dict)
-        cursor.execute(f"INSERT INTO flights (passport,from_town, to_town, date_from, date_to, price) VALUES ({one_dict['passport']},'{one_dict['from']}','{one_dict['to']}',TO_TIMESTAMP('{one_dict['date_from']}','YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('{one_dict['date_to']}','YYYY-MM-DD HH24:MI:SS'),{one_dict['price']});")
+    # if (row['from']!=row['to']):
+    # list_flights.append(one_dict)
+    cursor.execute(f"INSERT INTO flights (passport,from_town, to_town, date_from, date_to, price) VALUES ({one_dict['passport']},'{one_dict['from']}','{one_dict['to']}',TO_TIMESTAMP('{one_dict['date_from']}','YYYY-MM-DD HH24:MI:SS'),TO_TIMESTAMP('{one_dict['date_to']}','YYYY-MM-DD HH24:MI:SS'),{one_dict['price']});")
     i+=1
 
 #print(list_flights)
 f.write(f"Number of entries in Mongo: {i-1}\n")
-f.write(f"Number of entries deleted: {deleted}\n")
+f.write(f"Number of entries incorrect: {deleted}\n")
 f.write(f"Number of entries inserted into Postgres: {i-1-deleted}\n")
 f.write(f"Number of data changed: {modified}\n")
 f.write("\n")

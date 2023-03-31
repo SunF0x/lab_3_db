@@ -3,6 +3,10 @@ import json, ast
 import random
 from datetime import datetime, timedelta
 
+propertiesFileName = "./meta.json"
+propertiesFileJson = json.load(open(propertiesFileName,"r"))
+row_count = int(propertiesFileJson["row_count"])
+
 city_list = ['London','Paris','Moscow','Saint-Petersburg','Dubai','Tokyo','Singapore','Barselona','Madrid','Rome',
              'Doha','Abu Dhabi','San Francisco','Amsterdam','Toronto','Sydney','Berlin','New York', 'Los Angeles', 'Chicago', 
              'Houston', 'Philadelphia','Praga','Washington','Istanbul','Las Vegas','Seoul','San Diego','Miami','Milan',
@@ -16,18 +20,18 @@ def gen_datetime(min_year=2000, max_year=datetime.now().year):
     end = start + timedelta(days=365 * years)
     return start + (end - start) * random.random()
 
-def generator():
+def generator(start_passport=1000000000):
     with open('generate100.txt','w') as f:
-        for i in range(1,101):
+        for i in range(1,10001):
             time_from = gen_datetime()
             if (i%3==0):
-                f.write("{"+f"\"passport\":{random.randrange(1000000000, 9999999999)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from+timedelta(hours=random.randrange(1,17))}\",\"price\":{random.randrange(11455, 1300102)}"+"}")
+                f.write("{"+f"\"passport\":{random.randrange(start_passport, start_passport+row_count)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from+timedelta(hours=random.randrange(1,17))}\",\"price\":{random.randrange(11455, 1300102)}"+"}")
             elif (i%5==1):
-                f.write("{"+f"\"series\":{random.randrange(1000, 9999)},\"number\":{random.randrange(000000, 999999)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from+timedelta(hours=random.randrange(1,17))}\",\"price\":{random.randrange(11455, 1300102)}"+"}")
+                f.write("{"+f"\"series\":1000,\"number\":{random.randrange(0, row_count)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from+timedelta(hours=random.randrange(1,17))}\",\"price\":{random.randrange(11455, 1300102)}"+"}")
             elif (i%7==0):
-                f.write("{"+f"\"passport\":{random.randrange(1000000000, 9999999999)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from-timedelta(hours=random.randrange(1,17))}\",\"price\":{random.randrange(11455, 1300102)}"+"}")
+                f.write("{"+f"\"passport\":{random.randrange(start_passport, start_passport+row_count)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from-timedelta(hours=random.randrange(1,17))}\",\"price\":{random.randrange(11455, 1300102)}"+"}")
             else:
-                f.write("{"+f"\"passport\":{random.randrange(1000000000, 9999999999)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from+timedelta(hours=random.randrange(1,17))}\",\"price\":\"{random.randrange(11455, 1300102)}\""+"}")
+                f.write("{"+f"\"passport\":{random.randrange(start_passport, start_passport+row_count)},\"from\":\"{random.choice(city_list)}\",\"to\":\"{random.choice(city_list)}\",\"date_from\":\"{time_from}\",\"date_to\":\"{time_from+timedelta(hours=random.randrange(1,17))}\",\"price\":\"{random.randrange(11455, 1300102)}\""+"}")
             f.write("\n") 
 
 # generate new_file
@@ -49,7 +53,7 @@ with open("generate100.txt") as file:
 
 #print(insert_list)
 collection.insert_many(insert_list)
-print(f'{list(db["flights"].find())=}')
+# print(f'{list(db["flights"].find())=}')
 
 import psycopg2
 conn = psycopg2.connect(
