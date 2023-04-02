@@ -1,0 +1,21 @@
+{
+  "mysql": {
+    "user": "root",
+    "password": "123123",
+    "host": "localhost",
+    "database": "passportdb"
+  },
+  "clickhouse": {
+    "host": "localhost"
+  },
+  "mongo": {
+    "host": "localhost",
+    "port": "27017"
+  },
+  "postgres": {
+    "dbname":"postgres",
+    "user":"root",
+    "password":"123123",
+    "host":"localhost"
+  }
+}

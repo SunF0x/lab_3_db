@@ -1,16 +1,39 @@
 version: "3.9"
+
 services:
-  db:
-    restart: unless-stopped
-    container_name: mongo
-    image: mongo:latest
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=toor
+  
+  nosql_extract:
+    image: mongo
+    restart: always
+    container_name: mongo-container
     ports:
-      - "27017:27017"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "10"
+        - "27017:27017"
+
+  sql_extract:
+    image: mysql
+    restart: unless-stopped
+    container_name: mysql-container
+    environment:
+      - MYSQL_DATABASE=passportdb
+      - MYSQL_ROOT_PASSWORD=123123
+    ports:
+      - "3306:3306"
+
+  sql_load:
+    image: postgres
+    restart: unless-stopped
+    container_name: pg-container
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123123
+    ports:
+      - "5432:5432"
+
+  timeseries_load:
+    image: clickhouse/clickhouse-server
+    restart: unless-stopped
+    container_name: ch-container
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+      - "9009:9009"

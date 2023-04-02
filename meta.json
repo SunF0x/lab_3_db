@@ -1,3 +1,123 @@
 {
-    "row_count":10000
+  "row_count": 10000,
+  "mysql": {
+    "table": "passport",
+    "table_structure":
+      {
+        "passport_id": "INT",
+        "first_name": "VARCHAR (255)",
+        "last_name": "VARCHAR (255)",
+        "gender": "VARCHAR (10)",
+        "address": "VARCHAR (255)",
+        "birthday": "VARCHAR (30)",
+        "issue_date": "VARCHAR (30)"
+      },
+    "primary_key": "passport_id"
+  },
+  "mongo": {
+    "database": "FlightsBase",
+    "collection": "flights"
+  },
+
+  "postgres": {
+    "tables": [
+      {
+        "from": "mysql",
+        "table": "passport",
+        "table_structure": {
+          "passport_id": "INT",
+          "first_name": "VARCHAR",
+          "last_name": "VARCHAR",
+          "gender": "VARCHAR",
+          "address": "VARCHAR",
+          "birthday": "DATE",
+          "issue_date": "DATE"
+        },
+        "primary_key": "passport_id"
+      },
+      {
+        "from": "mongo",
+        "table": "flight",
+        "table_structure": {
+          "passport": "SERIAL",
+          "from_town": "VARCHAR",
+          "to_town": "VARCHAR",
+          "date_from": "TIMESTAMP",
+          "date_to": "TIMESTAMP",
+          "price": "BIGINT"
+        },
+        "FK": {
+          "local": "passport",
+          "foreign": {
+            "table": "passport",
+            "attribute": "passport_id"
+          }
+        }
+      }
+    ]
+  },
+  "queries_params": [
+    {
+      "name": "flight_between",
+      "passport_fields": ["first_name", "last_name", "gender", "birthday"],
+      "flight_fields": ["date_from"],
+      "flight_between": ["10.01.2005", "05.12.2005"]
+    },
+    {
+      "name": "birthday_in_flight",
+      "passport_fields": ["first_name", "last_name", "gender" , "address"],
+      "flight_fields": ["from_town"]
+    },
+    {
+      "passport_fields": ["first_name", "last_name", "address"],
+      "flight_fields": ["price"],
+      "price_between": [
+        {
+          "start" : 10000,
+          "stop": 20000
+        },
+        {
+          "start" : 33000,
+          "stop": 35000
+        },
+        {
+          "start" : 45000,
+          "stop": 350000
+        }
+      ]
+    }
+  ],
+  "clickhouse": {
+    "tables": [
+      {
+        "table": "flight_between",
+        "table_structure": {
+          "first_name": "String",
+          "last_name": "String",
+          "gender": "String",
+          "birthday": "Date",
+          "date_from": "DateTime"
+        }
+      },
+      {
+        "table": "birthday_in_flight",
+        "table_structure": {
+          "first_name": "String",
+          "last_name": "String",
+          "gender": "String",
+          "address": "String",
+          "from_town": "String"
+        }
+      },
+      {
+        "table": "price_between",
+        "table_structure": {
+          "first_name": "String",
+          "last_name": "String",
+          "address": "String",
+          "price": "UInt32"
+        }
+      }
+    ]
+  }
 }
