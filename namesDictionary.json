@@ -1,0 +1,10 @@
+{
+  "ru_names": ["Стас", "Иван", "Екатерина", "Татьяна", "Елизавета", "Евгений", "Евгений", "Владимир", "Сергей"],
+  "en_names": ["Stas", "Ivan", "Katya", "Tanya", "Liza", "Zhenya", "Evgeny", "Vladimir", "Julia", "Sergey"],
+  "ru_lastnames": ["Иванов", "Петров", "Сидоров", "Кузнецов", "Бузина", "ТестовоФамильный", "Зачетный"],
+  "en_lastnames": ["Ivanov", "Petrov", "Sidorov", "Kuznetsov", "Buzina", "TestovoFamilniy", "Zachetniy"],
+  "en_sex_abbr": [ "mrs", "ms", "f", "female", "miss", "ms.", "m", "male", "ml"],
+  "ru_sex_abbr": [ "жен", "жен", "жен", "жен", "жен", "жен", "муж", "муж", "муж"],
+  "en_country_abbr": ["Britain", "China", "Japan", "Australia", "Austria", "Germany", "Russia"],
+  "ru_country_abbr": ["Великобритания", "Китай", "Япония", "Австралия", "Австрия", "Германия", "Россия"]
+}
