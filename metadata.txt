@@ -1,5 +1,0 @@
-Import data from MongoDB to PostgreSQL into the flights table
-Current time: 2023-03-31 03:52:15.139012
-Number of entries in Mongo: 101
-Number of entries deleted: 1
-Number of entries inserted into Postgres: 100
