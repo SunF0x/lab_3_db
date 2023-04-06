@@ -92,9 +92,16 @@ def generatePassportData(count):
     res = []
     global passportId
     for i in range(count):
+        gender = random.choice(genders)
+        if gender == "муж":
+            first_name = extensions.fake.first_name_male()
+            last_name = extensions.fake.last_name_male()
+        else:
+            first_name = extensions.fake.first_name_female()
+            last_name = extensions.fake.last_name_female()
 
         row = [passportId,
-               extensions.fake.first_name(), extensions.fake.last_name(), random.choice(genders),
+               first_name, last_name, gender,
                extensions.fake.country() + ", " + extensions.fake.city(),
                extensions.random_date("1.1.1950", "1.1.1990", random.random()),
                extensions.random_date("1.1.2004", "1.1.2023", random.random())]
