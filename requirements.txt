@@ -1,6 +1,8 @@
 clickhouse_driver==0.2.5
 Faker==18.3.1
-mysql-connector-python~=8.0.32
 psycopg==3.1.8
 pymongo==4.3.3
 python_dateutil==2.8.2
+
+psycopg2~=2.9.5
+python-dateutil~=2.8.2

@@ -92,8 +92,19 @@ def fixRecord(record, logfile):
     #       иначе
     #           дата выдачи паспорта = дата рождения + 45
     passport_issue_index = passportGenerator.passportGeneration.Fields.PASS_ISSUE.value
-    passport_issue_date = datetime.strptime(items[passport_issue_index], "%d.%m.%Y").date()
-    birthday_date = datetime.strptime(items[birth_index], "%d.%m.%Y").date()
+
+    try:
+        passport_issue_date = datetime.strptime(items[passport_issue_index], "%d.%m.%Y").date()
+    except ValueError:
+        split_date = items[passport_issue_index].split('.')
+        passport_issue_date = datetime.strptime(f"28.{split_date[1]}.{split_date[2]}", "%d.%m.%Y").date()
+
+    try:
+        birthday_date = datetime.strptime(items[birth_index], "%d.%m.%Y").date()
+    except ValueError:
+        split_date = items[birth_index].split('.')
+        birthday_date = datetime.strptime(f"28.{split_date[1]}.{split_date[2]}", "%d.%m.%Y").date()
+
     diff = relativedelta(passport_issue_date, birthday_date)
     if diff.years < 14:
         reasons.append("Passport issue date")
