@@ -5,9 +5,11 @@ def make_queries(pg_instance: PgHandler, query_meta):
     # 1. Те, кто летали с A по Б
     # 2. Те, кто праздновал др в в самолете
     # 3. Группы людей, кто купил билеты в промежутках цен
+    # 4. Количество билетов, которые купили люди определенного возраста (диапазон)
     res = [[row for row in from_date_to_date_query(pg_instance, query_meta[0])],
            [row for row in birthday_flight_in_town_query(pg_instance, query_meta[1])],
-           [row for row in price_group_data(pg_instance, query_meta[2])]]
+           [row for row in price_group_data(pg_instance, query_meta[2])],
+           [row for row in age_ratio(pg_instance, query_meta[3])]]
 
     return res
 
@@ -61,5 +63,20 @@ def price_group_data(pg_instance: PgHandler, query_meta):
 
     query = f"SELECT {fields_to_select} FROM passport p JOIN flight f ON p.passport_id = f.passport " \
             f"WHERE {ranges} ORDER BY f.price;"
+
+    return pg_instance.executeReturnQuery(query)
+
+
+def age_ratio(pg_instance: PgHandler, query_meta):
+    flight_date_start = query_meta['flight_between'][0]
+    flight_date_end = query_meta['flight_between'][1]
+    age_start = query_meta["age_between"][0]
+    age_end = query_meta["age_between"][1]
+
+    query = f"SELECT date_part('year', age(p.birthday)), COUNT(*) FROM passport p JOIN flight f ON p.passport_id = f.passport " \
+            f"WHERE f.date_from BETWEEN '{flight_date_start}' " \
+            f"AND '{flight_date_end}' " \
+            f"AND date_part('year', age(p.birthday)) >= {age_start} AND date_part('year', age(p.birthday)) <= {age_end} "\
+            f"GROUP BY date_part('year', age(p.birthday));"
 
     return pg_instance.executeReturnQuery(query)

@@ -85,6 +85,11 @@
           "stop": 350000
         }
       ]
+    },
+    {
+      "name": "age_ratio",
+      "age_between": [50, 60],
+      "flight_between": ["10.01.2005", "05.12.2005"]
     }
   ],
   "clickhouse": {
@@ -116,6 +121,13 @@
           "last_name": "String",
           "address": "String",
           "price": "UInt32"
+        }
+      },
+      {
+        "table": "age_ratio",
+        "table_structure": {
+          "age_group": "Float32",
+          "count": "UInt64"
         }
       }
     ]
